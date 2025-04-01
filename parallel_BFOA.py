@@ -91,8 +91,13 @@ if __name__ == "__main__":
     
     print("poblacion inicial ...")
 
+    # Inicializar el archivo con encabezados
+    with open("resultados.csv", "w") as f:
+        f.write("corrida,fitness,tiempo_ejecucion,interaccion,calificacion_blosum\n")
+
     resultados = []
     for corrida in range(30):
+        print(f"Corrida numero: {corrida + 1}")
         start_time = time.time()
         operadorBacterial = bacteria(numeroDeBacterias)
         veryBest = [None, None, None]  # índice, fitness, secuencias
@@ -127,22 +132,27 @@ if __name__ == "__main__":
             operadorBacterial.replaceWorst(poblacion, veryBest[0])
             operadorBacterial.resetListas(numeroDeBacterias)
     
-    execution_time = time.time() - start_time
-    resultados.append({
-        "corrida": corrida + 1,
-        "fitness": veryBest[1],
-        "tiempo_ejecucion": execution_time,
-        "interaccion": operadorBacterial.tablaInteraction[veryBest[0]],
-        "calificacion_blosum": operadorBacterial.blosumScore[veryBest[0]]
-    })
-    df_resultados = pd.DataFrame(resultados)
-    df_resultados.to_csv("resultados.csv", index=False)
+        execution_time = time.time() - start_time
+        
+        # Crear un DataFrame solo con el resultado de esta corrida
+        df_current = pd.DataFrame({
+            "corrida": [corrida + 1],
+            "fitness": [veryBest[1]],
+            "tiempo_ejecucion": [execution_time],
+            "interaccion": [operadorBacterial.tablaInteraction[veryBest[0]]],
+            "calificacion_blosum": [operadorBacterial.blosumScore[veryBest[0]]]
+        })
+        
+        # Agregar al archivo CSV sin encabezados
+        df_current.to_csv("resultados.csv", mode="a", header=False, index=False)
+        
+        print(f"Corrida {corrida + 1} completada y guardada")
 
     print("Very Best: ", veryBest)
     #imprime el tiempo de ejecucion
     print("--- %s seconds ---" % (time.time() - start_time))
 
-    # Leer los resultados
+    # Leer los resultados completos
     df = pd.read_csv("resultados.csv")
 
     # Mostrar tabla resumen
@@ -168,4 +178,25 @@ if __name__ == "__main__":
     plt.legend()
     plt.grid()
     plt.savefig("tiempo_por_corrida.png")
+    plt.show()
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(df["corrida"], df["interaccion"], marker="o", label="Interacción")
+    plt.xlabel("Corrida")
+    plt.ylabel("Interacción")
+    plt.title("Interacción por Corrida")
+    plt.legend()
+    plt.grid()
+    plt.savefig("interaccion_por_corrida.png")
+    plt.show()
+
+    # Graficar calificación BLOSUM vs corrida
+    plt.figure(figsize=(10, 6))
+    plt.plot(df["corrida"], df["calificacion_blosum"], marker="o", label="Calificación BLOSUM")
+    plt.xlabel("Corrida")
+    plt.ylabel("Calificación BLOSUM")
+    plt.title("Calificación BLOSUM por Corrida")
+    plt.legend()
+    plt.grid()
+    plt.savefig("calificacion_blosum_por_corrida.png")
     plt.show()

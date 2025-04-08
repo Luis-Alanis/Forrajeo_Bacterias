@@ -1,0 +1,9 @@
+Métrica,Original,Mejorado,Diferencia,Cambio (%)
+Fitness Promedio,14.393,26.082,11.689,81.21
+Fitness Máximo,14.4,26.082,11.682,81.12
+Fitness Mínimo,14.2,26.082,11.882,83.68
+Tiempo Promedio (s),39.087,2.534,-36.552,-93.52
+Tiempo Mínimo (s),36.535,2.351,-34.183,-93.56
+Tiempo Máximo (s),44.636,2.813,-41.824,-93.7
+Interacción Promedio,1.0,0.887,-0.113,-11.33
+BLOSUM Promedio,1.0,13.0,12.0,1200.0

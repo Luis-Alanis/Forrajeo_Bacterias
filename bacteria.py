@@ -644,6 +644,7 @@ class bacteria():
                         # Encontrar la columna con mayor proporción de gaps y menor conservación
                         target_col = max(cluster, key=lambda x: x[1] - 0.5 * x[2])[0]
                         
+                        # FASE 2: Consolidar gaps en columnas adyacentes
                         # Mover gaps hacia la columna objetivo
                         for col_info in cluster:
                             source_col = col_info[0]
@@ -662,7 +663,7 @@ class bacteria():
                                         # Eliminar el gap original
                                         bacterium[seq_idx][source_col] = char_to_move
                 
-                # FASE 2: Eliminar columnas que ahora tienen solo gaps
+                # FASE 3: Eliminar columnas que ahora tienen solo gaps
                 i = 0
                 while i < len(bacterium[0]):
                     # Verificar si la columna es solo gaps
